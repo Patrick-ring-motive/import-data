@@ -14,7 +14,7 @@ const getSheet = ()=>{
 };
 
 
-const delimeter = decodeURIComponent('%EE%87%AF');
+const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
   url = String(url).replaceAll('"','%22');
