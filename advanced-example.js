@@ -24,11 +24,11 @@ function importData(url) {
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   try {
-    col = getColumnLock(importDataFile, importDataService);
-    cell = importDataFile.setCurrentCell(importDataService.getRange(`${col}2`));
-    cell.setValue(`=IMPORTDATA("${url}","${String.fromCharCode(57840)}")`);
+    col = getColumnLock(spreadSheet, sheet);
+    cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}2`));
+    cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
     SpreadsheetApp.flush();
-    const cells = importDataService.getRange(2, columns.indexOf(col) + 1, importDataService.getLastRow(), 1).getValues();
+    const cells = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1).getValues();
     const fetchedValue = cells.join('\n').trim();
     return fetchedValue;
   } catch (e) {
@@ -37,7 +37,7 @@ function importData(url) {
     (async () => {
       await "immediate";
       cell.setValue('');
-      cell = importDataFile.setCurrentCell(importDataService.getRange(`${col}1`));
+      cell = spreadSheet.setCurrentCell(importDataService.getRange(`${col}1`));
       cell.setValue('');
     })();
   }
