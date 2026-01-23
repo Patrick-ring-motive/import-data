@@ -1,8 +1,25 @@
+function test(){
+  const text = importData('https://www.example.com');
+  console.log(text);
+}
 
+
+const getSheet = ()=>{
+  const files = DriveApp.getFilesByName('importDataSheet');
+  try{
+    return SpreadsheetApp.open(files.next());
+  }catch{
+    return SpreadsheetApp.create('importDataSheet');
+  }
+};
+
+
+const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
-  const importDataFile = SpreadsheetApp.openById('118Ty5Y5humiZz3G9xOHbW9zgZCh3NkdSRI3oLIZ3lQQ');
-  const importDataService = importDataFile.getSheetByName("importDataSheet");
+  url = String(url).replaceAll('"','%22');
+  const spreadSheet = getSheet();
+  const sheet = spreadSheet.getSheetByName('buffer') || spreadSheet.insertSheet('buffer');
   let col;
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
