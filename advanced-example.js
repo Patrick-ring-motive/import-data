@@ -1,5 +1,5 @@
 function test(){
-  const text = importData('https://www.example.com');
+  const text = importData('https://www.google.com');
   console.log(text);
 }
 
@@ -32,7 +32,7 @@ const delimeter = String.fromCharCode(57840);
 function importData(url) {
   url = String(url).replaceAll('"','%22');
   const spreadSheet = getSpreadSheetByName('importDataSheet');
-  const sheet = getSheetBuffer(spreadSheet,`buffer${~~(Math.random() * 100)}`);
+  const sheet = getSheetBuffer(spreadSheet,`buffer${~~(Math.random() * 10)}`);
   let col;
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -44,9 +44,12 @@ function importData(url) {
     let range = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1);
     let cells = range.getValues();
     let result = cells.join('\n').trim();
-    if(result === '#REF!'){
+    if(['#REF!','#N/A'].includes(result)){
       const currentRows = sheet.getMaxRows();
       sheet.insertRowsAfter(currentRows, 10000);
+      while(sheet.getMaxRows()<10000)SpreadsheetApp.flush();
+      cell.setValue('');
+      SpreadsheetApp.flush();
       cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
       SpreadsheetApp.flush();
       range = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1);
@@ -62,6 +65,7 @@ function importData(url) {
       cell.setValue('');
       cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}1`));
       cell.setValue('');
+      SpreadsheetApp.flush();
     })();
   }
 }
@@ -76,7 +80,8 @@ function getColumnLock(spreadSheet, sheet) {
     col = columns[~~(Math.random() * 26)];
     cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}1`));
     cell.setValue(myID);
-    if (cell.getValues()[0] === myID) {
+    SpreadsheetApp.flush();
+    if (cell.getValues()[0] == myID) {
       return col;
     }
   }
