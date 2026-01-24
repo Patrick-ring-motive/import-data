@@ -70,6 +70,15 @@ Here we get the entire row. The response will spill over into additional cells b
 
 ⠀
 
+```js
+  range.clear();
+  SpreadsheetApp.flush();
+  return response;
+```
+
+Finally we cleanup the sheet and return the response.
+⠀
+
 Now we run the example and see the result `#REF!`. Lets open up Google Sheets and inspect the problem.
 
 ![](https://patrick-ring-motive.github.io/import-data/importData.jpeg)
