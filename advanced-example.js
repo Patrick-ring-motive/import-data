@@ -35,31 +35,27 @@ function importData(url) {
     return e.message;
   } finally {
     (async () => {
-      await "immediate";
+      await "defer";
       cell.setValue('');
-      cell = spreadSheet.setCurrentCell(importDataService.getRange(`${col}1`));
+      cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}1`));
       cell.setValue('');
     })();
   }
 }
 
-function getColumnLock(importDataFile, importDataService) {
+function getColumnLock(spreadSheet, sheet) {
   const myID = new Date().getTime();
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let col = 'A';
   let cell;
 
-  for (let i = 0; i < 1000; i++) {
-    col = columns[getRandomInt(26)];
-    cell = importDataFile.setCurrentCell(importDataService.getRange(`${col}1`));
+  for (let i = 0; i !== 1000; ++i) {
+    col = columns[~~(Math.random() * 26)];
+    cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}1`));
     cell.setValue(myID);
-    if (cell.getValues()[0] == myID) {
+    if (cell.getValues()[0] === myID) {
       return col;
     }
   }
   return col;
-}
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
 }
