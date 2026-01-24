@@ -44,7 +44,7 @@ function importData(url) {
 }
 
 function getColumnLock(spreadSheet, sheet) {
-  const myID = new Date().getTime();
+  const myID = Utilities.getUuid();
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let col = 'A';
   let cell;
