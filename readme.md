@@ -93,4 +93,19 @@ This warning comes from a Google Sheets security feature which is waranted since
 
 We've now successfully fetched data from across the web without impacting any of our quotas! Now there are quite a few caveats and constraints. You can only use HTTP GET and have no way to include any headers or authorization so the data must be publicly accessible. An individual cell has a 50K character limit and each sheet has a 10M cell limit. Also keep in mind that if there are not enough rows to fill your request then the response will not load even if you haven't reached the cell limit. `IMPORTDATA` is generally slower than `UrlFetchApp` though your mileage may vary. If you use this with any sort of frequency theb you will very likely run into concurrency issues. I have an [advanced example](https://github.com/Patrick-ring-motive/import-data/blob/main/advanced-example.js) that implements a basic locking strategy and rotating columns. You can imagine how to further scale this solution using multiple sheets.
 
+Below is a breakdown of the tradeoffs.
+
+| Feature | UrlFetchApp | IMPORTDATA |
+|---------|-------------|------------|
+| **Daily Quota** | 20,000 requests/day | No specific limit |
+| **Request Methods** | GET, POST, PUT, DELETE, etc. | GET only |
+| **Custom Headers** | ✅ Full support | ❌ Not supported |
+| **Authentication** | ✅ OAuth, API keys, etc. | ❌ Public endpoints only |
+| **Response Size** | 50 MB | 50K chars/cell, 10M cells/sheet |
+| **Speed** | Faster | Slower (spreadsheet overhead) |
+| **Concurrency** | Good | Poor (needs locking strategy) |
+| **Use Case** | Primary API integration | Quota relief for public data |
+| **Best For** | Authenticated APIs, POST requests, high-volume | Public data scraping, quota workarounds |
+
+
 In spite of all these limitations, this is a powerful tool to have in your tool belt when building robust solutions in Google Apps Script.
