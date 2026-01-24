@@ -29,8 +29,7 @@ function importData(url) {
     cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
     SpreadsheetApp.flush();
     const cells = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1).getValues();
-    const fetchedValue = cells.join('\n').trim();
-    return fetchedValue;
+    return cells.join('\n').trim();
   } catch (e) {
     return e.message;
   } finally {
