@@ -3,14 +3,20 @@ function test(){
   console.log(text);
 }
 
+const spreadSheetMemo = {};
+const fileMemo = {};
 
 const getSpreadSheetByName = (name)=>{
-  const files = DriveApp.getFilesByName(name);
-  try{
-    return SpreadsheetApp.open(files.next());
-  }catch{
-    return SpreadsheetApp.create(name);
+  if(name in spreadSheetMemo){
+    return spreadSheetMemo[name];
   }
+  try{
+    fileMemo[name] = fileMemo[name] ?? DriveApp.getFilesByName(name).next();
+    spreadSheetMemo[name] = SpreadsheetApp.open(fileMemo[name]);
+  }catch{
+    spreadSheetMemo[name] = SpreadsheetApp.create(name);
+  }
+  return spreadSheetMemo[name];
 };
 
 const getSheetBuffer = (spreadSheet,name) => spreadSheet.getSheetByName(name) || spreadSheet.insertSheet(name);
