@@ -31,6 +31,7 @@ const delimeter = String.fromCharCode(57840);
 By default `IMPORTDATA` tries to parse the data received from the URL as a CSV and splits using commas as delimeters. 
 We can override the character used as a delimeter using the second parameter of `IMPORTDATA`. `const delimeter = String.fromCharCode(57840);` is not a valid unicode character so we don't expect it to appear in text data. This effectively constrains our response to a single column.
 
+⠀
 
 ```js
 url = String(url).replaceAll('"','%22');
@@ -38,6 +39,7 @@ url = String(url).replaceAll('"','%22');
 
 This is a basic sanitization to prevent escaping the sheet command.
 
+⠀
 
 ```js
   const spreadSheet = getSheet();
@@ -46,6 +48,7 @@ This is a basic sanitization to prevent escaping the sheet command.
 
 Here we get the spreadsheet file and either grab the buffer sheet or create it.
 
+⠀
 
 ```js
   sheet.getRange(1, 1).setFormula(`=IMPORTDATA("${url}","${delimeter}")`);
@@ -54,6 +57,7 @@ Here we get the spreadsheet file and either grab the buffer sheet or create it.
 
 This initiates the fetch request in the very first cell and waits for the response.
 
+⠀
 
 ```js
   const lastRow = sheet.getLastRow();
@@ -62,4 +66,10 @@ This initiates the fetch request in the very first cell and waits for the respon
   response = range.getValues().flat().join('\n');
 ```
 
-Here we get the entire row. The response will spill over into additional cells.
+Here we get the entire row. The response will spill over into additional cells by spliting in '\n' so we grab all the values and `.trim()` since all the empty rows at the end will be collected as well.
+
+⠀
+
+Now we run the example and see the result `#REF#`. Lets open up Google Sheets and inspect the problem.
+
+
