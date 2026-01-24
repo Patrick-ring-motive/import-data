@@ -20,8 +20,13 @@ const getSpreadSheetByName = (name)=>{
 };
 
 const getSheetBuffer = (spreadSheet,name) => {
-  spreadSheet.getSheetByName(name) || spreadSheet.insertSheet(name);
+  spreadSheet.memo = spreadSheet.memo ?? {};
+  spreadSheet.memo[name] = spreadSheet.memo[name]
+    ?? spreadSheet.getSheetByName(name)
+    ?? spreadSheet.insertSheet(name);
+  return spreadSheet.memo[name];
 };
+
 const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
