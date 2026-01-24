@@ -4,7 +4,7 @@ function test(){
 }
 
 
-const getSheet = ()=>{
+const getSpreadSheetByName = ()=>{
   const files = DriveApp.getFilesByName('importDataSheet');
   try{
     return SpreadsheetApp.open(files.next());
@@ -13,13 +13,14 @@ const getSheet = ()=>{
   }
 };
 
+const getSheetBuffer = (spreadSheet,name) => spreadSheet.getSheetByName(name) || spreadSheet.insertSheet(name);
 
 const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
   url = String(url).replaceAll('"','%22');
   const spreadSheet = getSheet();
-  const sheet = spreadSheet.getSheetByName('buffer') || spreadSheet.insertSheet('buffer');
+  const sheet = getSheetBuffer(`buffer${~~(Math.random() * 100)}`):
   let col;
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
