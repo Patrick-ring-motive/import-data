@@ -19,8 +19,9 @@ const getSpreadSheetByName = (name)=>{
   return spreadSheetMemo[name];
 };
 
-const getSheetBuffer = (spreadSheet,name) => spreadSheet.getSheetByName(name) || spreadSheet.insertSheet(name);
-
+const getSheetBuffer = (spreadSheet,name) => {
+  spreadSheet.getSheetByName(name) || spreadSheet.insertSheet(name);
+};
 const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
