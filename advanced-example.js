@@ -4,12 +4,12 @@ function test(){
 }
 
 
-const getSpreadSheetByName = ()=>{
-  const files = DriveApp.getFilesByName('importDataSheet');
+const getSpreadSheetByName = (name)=>{
+  const files = DriveApp.getFilesByName(name);
   try{
     return SpreadsheetApp.open(files.next());
   }catch{
-    return SpreadsheetApp.create('importDataSheet');
+    return SpreadsheetApp.create(name);
   }
 };
 
@@ -19,7 +19,7 @@ const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
   url = String(url).replaceAll('"','%22');
-  const spreadSheet = getSheet();
+  const spreadSheet = getSpreadSheetByName('importDataSheet');
   const sheet = getSheetBuffer(`buffer${~~(Math.random() * 100)}`):
   let col;
   let cell;
