@@ -103,7 +103,7 @@ Below is a breakdown of the tradeoffs.
 | **Authentication** | ✅ OAuth, API keys, etc. | ❌ Public endpoints only |
 | **Response Size** | 50 MB | 50K chars/cell, 10M cells/sheet |
 | **Speed** | Faster | Slower (spreadsheet overhead) |
-| **Concurrency** | Good | Poor (needs locking strategy or juggling multiple sheets) |
+| **Concurrency** | Good especially with `UrlFetchApp.fetchAll()` | Manual (needs locking strategy or juggling multiple sheets) |
 | **Use Case** | Primary API integration | Quota relief for public data |
 | **Best For** | Authenticated APIs, POST requests, high-volume | Public data scraping |
 
