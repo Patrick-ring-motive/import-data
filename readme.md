@@ -72,4 +72,6 @@ Here we get the entire row. The response will spill over into additional cells b
 
 Now we run the example and see the result `#REF#`. Lets open up Google Sheets and inspect the problem.
 
+![](https://patrick-ring-motive.github.io/import-data/importData.jpeg)
 
+This warning comes from a Google Sheets security feature which is waranted since we are importing data from anywhere. Simply `Allow` access and run the script again.
