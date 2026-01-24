@@ -32,7 +32,7 @@ const delimeter = String.fromCharCode(57840);
 function importData(url) {
   url = String(url).replaceAll('"','%22');
   const spreadSheet = getSpreadSheetByName('importDataSheet');
-  const sheet = getSheetBuffer(`buffer${~~(Math.random() * 100)}`):
+  const sheet = getSheetBuffer(spreadSheet,`buffer${~~(Math.random() * 100)}`);
   let col;
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -41,8 +41,19 @@ function importData(url) {
     cell = spreadSheet.setCurrentCell(sheet.getRange(`${col}2`));
     cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
     SpreadsheetApp.flush();
-    const cells = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1).getValues();
-    return cells.join('\n').trim();
+    let range = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1);
+    let cells = range.getValues();
+    let result = cells.join('\n').trim();
+    if(result === '#REF!'){
+      const currentRows = sheet.getMaxRows();
+      sheet.insertRowsAfter(currentRows, 10000);
+      cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
+      SpreadsheetApp.flush();
+      range = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1);
+      cells = range.getValues();
+      result = cells.join('\n').trim();
+    }
+    return result;
   } catch (e) {
     return e.message;
   } finally {
