@@ -46,8 +46,12 @@ function importData(url) {
     let result = cells.join('\n').trim();
     if(['#REF!','#N/A'].includes(result)){
       const currentRows = sheet.getMaxRows();
-      sheet.insertRowsAfter(currentRows, 10000);
-      while(sheet.getMaxRows()<10000)SpreadsheetApp.flush();
+      try{
+        sheet.insertRowsAfter(currentRows, 10000);
+        while(sheet.getMaxRows()<10000)SpreadsheetApp.flush();
+      }catch(err){
+        console.warn(err);
+      }
       cell.setValue('');
       SpreadsheetApp.flush();
       cell.setValue(`=IMPORTDATA("${url}","${delimeter}")`);
