@@ -1,4 +1,4 @@
-function test(){
+function test() {
   const text = importData('https://www.google.com');
   console.log(text);
 }
@@ -6,33 +6,33 @@ function test(){
 const spreadSheetMemo = {};
 const fileMemo = {};
 
-const getSpreadSheetByName = (name)=>{
-  if(name in spreadSheetMemo){
+const getSpreadSheetByName = (name) => {
+  if (name in spreadSheetMemo) {
     return spreadSheetMemo[name];
   }
-  try{
+  try {
     fileMemo[name] = fileMemo[name] ?? DriveApp.getFilesByName(name).next();
     spreadSheetMemo[name] = SpreadsheetApp.open(fileMemo[name]);
-  }catch{
+  } catch {
     spreadSheetMemo[name] = SpreadsheetApp.create(name);
   }
   return spreadSheetMemo[name];
 };
 
-const getSheetBuffer = (spreadSheet,name) => {
+const getSheetBuffer = (spreadSheet, name) => {
   spreadSheet.memo = spreadSheet.memo ?? {};
-  spreadSheet.memo[name] = spreadSheet.memo[name]
-    ?? spreadSheet.getSheetByName(name)
-    ?? spreadSheet.insertSheet(name);
+  spreadSheet.memo[name] = spreadSheet.memo[name] ??
+    spreadSheet.getSheetByName(name) ??
+    spreadSheet.insertSheet(name);
   return spreadSheet.memo[name];
 };
 
 const delimeter = String.fromCharCode(57840);
 
 function importData(url) {
-  url = String(url).replaceAll('"','%22');
+  url = String(url).replaceAll('"', '%22');
   const spreadSheet = getSpreadSheetByName('importDataSheet');
-  const sheet = getSheetBuffer(spreadSheet,`buffer${~~(Math.random() * 10)}`);
+  const sheet = getSheetBuffer(spreadSheet, `buffer${~~(Math.random() * 10)}`);
   let col;
   let cell;
   const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -44,12 +44,12 @@ function importData(url) {
     let range = sheet.getRange(2, columns.indexOf(col) + 1, sheet.getLastRow(), 1);
     let cells = range.getValues();
     let result = cells.join('\n').trim();
-    if(['#REF!','#N/A'].includes(result)){
+    if (['#REF!', '#N/A'].includes(result)) {
       const currentRows = sheet.getMaxRows();
-      try{
+      try {
         sheet.insertRowsAfter(currentRows, 10000);
-        while(sheet.getMaxRows()<10000)SpreadsheetApp.flush();
-      }catch(err){
+        while (sheet.getMaxRows() < 10000) SpreadsheetApp.flush();
+      } catch (err) {
         console.warn(err);
       }
       cell.setValue('');
